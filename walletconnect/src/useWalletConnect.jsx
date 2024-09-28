@@ -82,6 +82,8 @@ const useWalletConnect = () => {
   const chainChangedHandler = async () => {
     const newChainId = await getChainId();
     setChainId(newChainId);
+    const balance = await getAccountBalance(defaultAccount);
+    setUserBalance(balance);
   };
 
   useEffect(() => {
