@@ -1,8 +1,7 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# The Task:
+You are to build a react application implementing injected wallet connection, with all necessary events handled.
 
-Currently, two official plugins are available:
+The connection state, methods, and events should be managed in a custom hook. Use as many react hooks as possible
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The application should have an input field for address, and should get and render the balance of the address, depending on the network you're connected to.
