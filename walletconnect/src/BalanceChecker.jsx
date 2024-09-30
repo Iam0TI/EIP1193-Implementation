@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { getAccountBalance } from "./useWalletConnect";
+import { getAccountBalance } from "./context/walletConnectContext";
 import { readOnlyProvider } from "./utils";
 
 const BalanceChecker = () => {

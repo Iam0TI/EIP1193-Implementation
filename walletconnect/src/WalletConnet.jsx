@@ -1,7 +1,9 @@
-import useWalletConnect from "./useWalletConnect";
+import { useWalletConnect } from "./context/walletConnectContext";
 import "./walletConnect.css";
 
-const WalletConnect = () => {
+const WalletConnet = () => {
+  console.log("WalletConnect component is rendering");
+
   const {
     errorMessage,
     defaultAccount,
@@ -15,7 +17,7 @@ const WalletConnect = () => {
 
   return (
     <div className="WalletConnect">
-      <h4>{"Boys let's connect to MetaMask using window.ethereum methods"}</h4>
+      <h4>{"Let's connect to MetaMask using window.ethereum methods"}</h4>
       <button onClick={connectWalletHandler}>{connButtonText}</button>
       <button onClick={disconnectWalletHandler}>{disconnectButtonText}</button>
       <div className="accountDisplay">
@@ -32,4 +34,4 @@ const WalletConnect = () => {
   );
 };
 
-export default WalletConnect;
+export default WalletConnet;

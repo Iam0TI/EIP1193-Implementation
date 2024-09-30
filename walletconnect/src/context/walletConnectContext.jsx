@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+/* eslint-disable react-refresh/only-export-components */
+import { useState, useEffect, createContext, useContext } from "react";
 import { ethers } from "ethers";
 
 // Utility functions
 const getChainId = async () => {
   try {
     const chainId = await window.ethereum.request({ method: "eth_chainId" });
-    return parseInt(chainId, 16); // Convert from hex to decimal
+    return parseInt(chainId, 16); // convert from hex to decimal
   } catch (error) {
     console.error("Failed to get chain ID:", error);
     return null;
@@ -25,7 +27,9 @@ export const getAccountBalance = async (account) => {
   }
 };
 
-const useWalletConnect = () => {
+const WalletConnect = createContext();
+
+const WalletConnectProvider = ({ children }) => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [defaultAccount, setDefaultAccount] = useState(null);
   const [userBalance, setUserBalance] = useState(null);
@@ -35,12 +39,11 @@ const useWalletConnect = () => {
 
   const connectWalletHandler = async () => {
     if (window.ethereum) {
-      console.log("Wallet Here!");
       try {
         const result = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
-        await getAccountBalance(result[0]);
+        // await getAccountBalance(result[0]);
         await chainChangedHandler();
         await accountChangedHandler(result[0]);
         setConnButtonText("Wallet Connected");
@@ -49,7 +52,6 @@ const useWalletConnect = () => {
         setErrorMessage(error.message);
       }
     } else {
-      console.log("Need to install wallet");
       setErrorMessage("Please install wallet extension to interact");
     }
   };
@@ -87,10 +89,10 @@ const useWalletConnect = () => {
   };
 
   useEffect(() => {
+    console.log("WalletConnectProvider useEffect is running");
     if (window.ethereum) {
       window.ethereum.on("accountsChanged", accountChangedHandler);
       window.ethereum.on("chainChanged", chainChangedHandler);
-
       return () => {
         window.ethereum.removeListener("chainChanged", chainChangedHandler);
         window.ethereum.removeListener(
@@ -101,7 +103,7 @@ const useWalletConnect = () => {
     }
   }, []);
 
-  return {
+  const contextValue = {
     errorMessage,
     defaultAccount,
     userBalance,
@@ -111,6 +113,22 @@ const useWalletConnect = () => {
     connectWalletHandler,
     disconnectWalletHandler,
   };
+
+  return (
+    <WalletConnect.Provider value={contextValue}>
+      {children}
+    </WalletConnect.Provider>
+  );
 };
 
-export default useWalletConnect;
+export const useWalletConnect = () => {
+  const context = useContext(WalletConnect);
+  if (context === undefined) {
+    throw new Error(
+      "useWalletConnect must be used within a WalletConnectProvider"
+    );
+  }
+  return context;
+};
+
+export default WalletConnectProvider;
